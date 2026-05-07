@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Share File | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="narrow">
+    <p class="eyebrow">Dynamic access control</p>
+    <h1>Share {{ file.filename }}</h1>
+    <p class="muted">Create a secure link with an expiry time and maximum download count.</p>
+
+    <form class="form-card" method="post">
+        <label>
+            Link expiry in hours
+            <input type="number" name="hours" min="1" max="168" value="24" required>
+        </label>
+        <label>
+            Download limit
+            <input type="number" name="limit" min="1" max="100" value="5" required>
+        </label>
+        <button type="submit">Generate Secure Link</button>
+        <a class="button subtle full" href="{{ url_for('dashboard') }}">Back to dashboard</a>
+    </form>
+</section>
+{% endblock %}

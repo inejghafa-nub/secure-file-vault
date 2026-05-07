@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Share Links | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="dashboard-head">
+    <div>
+        <p class="eyebrow">Access control</p>
+        <h1>Manage share links</h1>
+        <p class="muted">Review active links, download limits, usage count, expiry, and revoke access whenever needed.</p>
+    </div>
+</section>
+
+<section class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Expiry</th>
+                <th>Usage</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for link in links %}
+                {% set expired = link.expiry and now > link.expiry %}
+                {% set exhausted = link.download_count >= link.download_limit %}
+                <tr>
+                    <td>{{ link.file.filename }}</td>
+                    <td>{{ link.expiry.strftime('%d %b %Y, %I:%M %p') if link.expiry else 'No expiry' }}</td>
+                    <td>{{ link.download_count }} / {{ link.download_limit }}</td>
+                    <td>
+                        {% if expired %}
+                            <span class="status danger">Expired</span>
+                        {% elif exhausted %}
+                            <span class="status danger">Limit reached</span>
+                        {% else %}
+                            <span class="status success">Active</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        <a class="button subtle" href="{{ url_for('shared_download', token=link.token, _external=True) }}" target="_blank">Open</a>
+                        <form action="{{ url_for('revoke_link', link_id=link.id) }}" method="post" onsubmit="return confirm('Revoke this share link?');">
+                            <button class="danger-button" type="submit">Revoke</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="empty">No share links created yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Login | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="auth-panel">
+    <div>
+        <p class="eyebrow">User access</p>
+        <h1>Login to your personal vault</h1>
+        <p class="muted">Upload, encrypt, share, and monitor your files from one secure dashboard.</p>
+    </div>
+
+    <form class="form-card" method="post">
+        <label>
+            Username
+            <input type="text" name="username" autocomplete="username" required>
+        </label>
+        <label>
+            Password
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit">Login</button>
+        <p class="form-note">New user? <a href="{{ url_for('register') }}">Create an account</a></p>
+        <p class="form-note"><a href="{{ url_for('host_login') }}">Host login</a></p>
+    </form>
+</section>
+{% endblock %}

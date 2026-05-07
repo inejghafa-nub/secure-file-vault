@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">Intelligent secure file vault</p>
+        <h1>Encrypted storage with dynamic access control</h1>
+        <p class="muted">A cyber-themed Flask project for secure upload, encrypted storage, controlled sharing, expiry-based links, download limits, metadata tracking, and audit monitoring.</p>
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('login') }}">User Login</a>
+            <a class="button subtle" href="{{ url_for('host_login') }}">Host Login</a>
+            <a class="button light" href="{{ url_for('register') }}">Create Account</a>
+        </div>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <strong>AES Encryption</strong>
+            <span>Files are encrypted before server storage.</span>
+        </div>
+        <div class="feature-card">
+            <strong>Dynamic Sharing</strong>
+            <span>Links can expire and stop after set downloads.</span>
+        </div>
+        <div class="feature-card">
+            <strong>Vault Intelligence</strong>
+            <span>Track size, type, download count, and link status.</span>
+        </div>
+        <div class="feature-card">
+            <strong>Host Panel</strong>
+            <span>Admin-style monitoring with failed login visibility.</span>
+        </div>
+    </div>
+</section>
+{% endblock %}
