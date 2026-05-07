@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Host Dashboard | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="dashboard-head">
+    <div>
+        <p class="eyebrow">Host dashboard</p>
+        <h1>System overview</h1>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card"><span>Users</span><strong>{{ stats.users }}</strong></div>
+    <div class="stat-card"><span>Files</span><strong>{{ stats.files }}</strong></div>
+    <div class="stat-card"><span>Share Links</span><strong>{{ stats.links }}</strong></div>
+    <div class="stat-card"><span>Failed Logins</span><strong>{{ stats.failed_logins }}</strong></div>
+</section>
+
+<section class="host-grid">
+    <div class="table-wrap">
+        <h2>Registered Users</h2>
+        <table>
+            <thead>
+                <tr><th>Username</th><th>Files</th></tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr><td>{{ user.username }}</td><td>{{ user.files|length }}</td></tr>
+                {% else %}
+                    <tr><td colspan="2" class="empty">No users yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-wrap">
+        <h2>Recent Files</h2>
+        <table>
+            <thead>
+                <tr><th>File</th><th>Owner</th><th>Size</th></tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                    <tr><td>{{ file.filename }}</td><td>{{ file.owner.username }}</td><td>{{ file.file_size|filesize }}</td></tr>
+                {% else %}
+                    <tr><td colspan="3" class="empty">No files yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="table-wrap">
+    <h2>Failed Login Monitoring</h2>
+    <table>
+        <thead>
+            <tr><th>Attempt</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+            {% for log in failed_logs %}
+                <tr>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.timestamp.strftime('%d %b %Y, %I:%M %p') }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="2" class="empty">No failed login attempts recorded.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section class="table-wrap">
+    <h2>Recent Activity</h2>
+    <table>
+        <thead>
+            <tr><th>Action</th><th>Time</th></tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.timestamp.strftime('%d %b %Y, %I:%M %p') }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="2" class="empty">No activity yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

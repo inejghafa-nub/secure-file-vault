@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Register | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="auth-panel">
+    <div>
+        <p class="eyebrow">Account setup</p>
+        <h1>Create your vault</h1>
+        <p class="muted">Your password is stored as a secure hash, and uploaded files are encrypted before storage.</p>
+    </div>
+
+    <form class="form-card" method="post">
+        <label>
+            Username
+            <input type="text" name="username" autocomplete="username" required>
+        </label>
+        <label>
+            Password
+            <input id="password" type="password" name="password" autocomplete="new-password" required>
+        </label>
+        <div class="password-rules">
+            <span id="length-rule">8+ characters</span>
+            <span id="upper-rule">Uppercase</span>
+            <span id="lower-rule">Lowercase</span>
+            <span id="number-rule">Number</span>
+            <span id="special-rule">Special character</span>
+        </div>
+        <button type="submit">Register</button>
+        <p class="form-note">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+    </form>
+</section>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

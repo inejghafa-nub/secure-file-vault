@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Secure File Vault{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('dashboard') if current_user.is_authenticated and current_user.role == 'user' else url_for('host_dashboard') if current_user.is_authenticated and current_user.role == 'host' else url_for('index') }}">
+            Secure File Vault
+        </a>
+        <nav>
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'host' %}
+                    <a href="{{ url_for('host_dashboard') }}">Host Dashboard</a>
+                    <a href="{{ url_for('change_password') }}">Change Password</a>
+                {% else %}
+                    <a href="{{ url_for('dashboard') }}">User Dashboard</a>
+                    <a href="{{ url_for('share_links') }}">Share Links</a>
+                    <a href="{{ url_for('logs') }}">Activity Logs</a>
+                    <a href="{{ url_for('change_password') }}">Change Password</a>
+                {% endif %}
+                <a class="button subtle" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('login') }}">User Login</a>
+                <a href="{{ url_for('host_login') }}">Host Login</a>
+                <a class="button subtle" href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

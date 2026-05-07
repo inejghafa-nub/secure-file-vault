@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Secure File Vault{% endblock %}
+
+{% block content %}
+<section class="dashboard-head">
+    <div>
+        <p class="eyebrow">Welcome, {{ current_user.username }}</p>
+        <h1>Your encrypted files</h1>
+        <p class="muted">Search, monitor, share, and control your encrypted documents from one cyber vault workspace.</p>
+    </div>
+    <form class="upload-box" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload & Encrypt</button>
+    </form>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card"><span>Total Files</span><strong>{{ stats.total_files }}</strong></div>
+    <div class="stat-card"><span>Storage Used</span><strong>{{ stats.total_size|filesize }}</strong></div>
+    <div class="stat-card"><span>Downloads</span><strong>{{ stats.downloads }}</strong></div>
+    <div class="stat-card"><span>Active Links</span><strong>{{ stats.active_links }}</strong></div>
+</section>
+
+<form class="search-bar" method="get" action="{{ url_for('dashboard') }}">
+    <input type="search" name="q" value="{{ search }}" placeholder="Search encrypted files by name">
+    <button type="submit">Search</button>
+    {% if search %}
+        <a class="button subtle" href="{{ url_for('dashboard') }}">Clear</a>
+    {% endif %}
+</form>
+
+<section class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>File name</th>
+                <th>Size</th>
+                <th>Type</th>
+                <th>Downloads</th>
+                <th>Uploaded</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.filename }}</td>
+                    <td>{{ file.file_size|filesize }}</td>
+                    <td>{{ file.content_type }}</td>
+                    <td>{{ file.download_count }}</td>
+                    <td>{{ file.upload_time.strftime('%d %b %Y, %I:%M %p') }}</td>
+                    <td class="actions">
+                        <a class="button" href="{{ url_for('download', file_id=file.id) }}">Download</a>
+                        <a class="button subtle" href="{{ url_for('share', file_id=file.id) }}">Share</a>
+                        <form action="{{ url_for('delete_file', file_id=file.id) }}" method="post" onsubmit="return confirm('Delete this file permanently?');">
+                            <button class="danger-button" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="empty">No files found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
